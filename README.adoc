@@ -3,7 +3,7 @@ A simple program to sub-sample csv data from the command line.
 
 == Usage
 ```
-SubSampler --interval i [--sample column] [--indentity col1,col2,..] [--input in] [--output out]
+SubSampler --interval i [--sample column] [--identity col1,col2,..] [--input in] [--output out]
 ```
 
 
