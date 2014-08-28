@@ -1,0 +1,65 @@
+= CSV SubSampler
+A simple program to sub-sample csv data from the command line.
+
+== Usage
+```
+SubSampler --interval i [--sample column] [--indentity col1,col2,..] [--input in] [--output out]
+```
+
+
+This will read file `in` (default stdin) and write to file `out` (default stdout), processing each line.
+For each line, will look at column `column` (0-based), parse this as a number and will not emit the line unless interval `i` has elapsed.
+
+Additionally, one can provide indices of columns that need to be treated as identifiers for each line. Last-seen values will then be kept per group.
+
+== Examples
+
+Given input
+```
+1,hello
+2,world
+3,how
+5,are
+6,you
+7,?
+```
+
+then passing through `SumSampler --interval 2` will output
+```
+1,hello
+3,how
+5,are
+7,?
+```
+
+With the following input:
+```
+1,1377986401,68.451,0,11,0,0
+2,1377986401,19.927,1,11,0,0
+3,1377986401,11.721,0,2,0,0
+4,1377986401,9.472,1,2,0,0
+5,1377986401,0,1,11,0,0
+6,1377986402,0.355,0,3,0,0
+7,1377986402,68.451,0,7,0,0
+8,1377986406,17.743,0,7,0,0
+9,1377986406,0,1,11,0,0
+10,1377986406,3.701,0,9,0,0
+```
+
+then an invocation of `SubSampler --interval 5 --sample 1 --identity 3,4,5,6` will output
+
+```
+1,1377986401,68.451,0,11,0,0
+2,1377986401,19.927,1,11,0,0
+3,1377986401,11.721,0,2,0,0
+4,1377986401,9.472,1,2,0,0
+6,1377986402,0.355,0,3,0,0
+7,1377986402,68.451,0,7,0,0
+9,1377986406,0,1,11,0,0
+10,1377986406,3.701,0,9,0,0
+```
+
+* Line 5 is for the same identity of `1,11,0,0` as line 2 and delta is 0 (< 5)
+* Line 8 is for the same identity of `0,7,0,0` as line 7 and delta is 4 (< 5)
+
+
